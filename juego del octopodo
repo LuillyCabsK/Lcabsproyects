@@ -1,0 +1,75 @@
+let numeroSecreto = generarNumeroSecreto();
+let intentos = 0;
+let listaNumerosSorteados = [];
+let numeroMaximo = 10;
+//la funcion se vuelve generica para definir o citar en cualquier momento
+function asignarTextoElemento (elemento, texto) {   
+    let elementoHTML = document.querySelector(elemento);
+    elementoHTML.innerHTML = texto;
+    return; // buena practica
+}
+// funcion de dar click en intentar
+function verificarIntento(){
+    let numeroDeUsuario = parseInt(document.getElementById ('valorUsuario').value); // caja de texto en blanco - getelement retorna un valor especifico del objeto
+    console.log (intentos);
+   console.log (numeroDeUsuario);
+    console.log(typeof (numeroDeUsuario));
+    console.log(numeroSecreto);
+    console.log(typeof (numeroSecreto));
+    console.log (numeroDeUsuario === numeroSecreto);  // validacion en valor y tipo
+    if (numeroDeUsuario === numeroSecreto) {
+        asignarTextoElemento ('p', `acertaste el numero secreto ${intentos} ${(intentos === 1) ? 'vez' : 'veces'}`); // cambia el texto por otro -- resumen ifelse
+        document.getElementById ('reiniciar').removeAttribute('disabled');
+    } else {
+        if (numeroDeUsuario > numeroSecreto){
+            asignarTextoElemento ('p','el numero secreto es menor');
+        } else {
+            asignarTextoElemento ('p','el numero secreto es mayor');
+        }
+        intentos++; // aumenta el contador de intentos 
+        limpiarcaja (); // invoca la funcion
+    }
+        return;
+}
+// las  funciones siempre afuera
+function limpiarcaja (){
+    document.querySelector ('#valorUsuario').value =''; // qr selector por ID
+    }
+
+function generarNumeroSecreto() { 
+    let numeroGenerado = Math.floor(Math.random()*numeroMaximo)+1;
+    // si ya sorteamos todos los numeros 
+
+    if (listaNumerosSorteados.length == numeroMaximo){
+        asignarTextoElemento ('p','ya se asignaron todos los numeros posibles');
+    }
+else {
+    console.log(numeroGenerado);
+    console.log(listaNumerosSorteados);
+  // si el numero generado esta incluido en la lista hacemos lo siguiente
+   if (listaNumerosSorteados.includes(numeroGenerado)) {
+        return generarNumeroSecreto();
+  } else {
+        listaNumerosSorteados.push(numeroGenerado);
+        return numeroGenerado;
+  } 
+}
+}
+function condicionesIniciales(){
+    asignarTextoElemento ( 'h1', '¡Juego del octopodo!'); // llama a la funcion
+    asignarTextoElemento ( 'p', `Ingresa un numero del  1 al ${numeroMaximo}`);
+    numeroSecreto = generarNumeroSecreto(); 
+    // INVOCA LA FUNCION
+    intentos = 1;
+}
+function reiniciarJuego ()
+    //limpiar la caja
+    limpiarcaja ();
+
+    // indicar mensaje de intervalo de numeros
+    condicionesIniciales();
+   
+    // desabilitar el boton de nuevo juego
+    document.querySelector('#reiniciar').setAttribute('disabled','true'); //se recoloca 
+}
+condicionesIniciales();
